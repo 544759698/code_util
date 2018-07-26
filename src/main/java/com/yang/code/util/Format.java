@@ -1,5 +1,10 @@
 package com.yang.code.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Created by Administrator on 2018/7/26.
  * 格式转换工具类
@@ -88,5 +93,55 @@ public class Format {
             }
         }
         return def;
+    }
+
+    /**
+     * 左侧填充
+     *
+     * @param oriStr
+     * @param len
+     * @param alexin
+     * @return
+     */
+    public static String padLeft(String oriStr, int len, char alexin) {
+        return pad(oriStr, len, alexin) + oriStr;
+    }
+
+    /**
+     * 右侧填充
+     *
+     * @param oriStr
+     * @param len
+     * @param alexin
+     * @return
+     */
+    public static String padRight(String oriStr, int len, char alexin) {
+        return oriStr + pad(oriStr, len, alexin);
+    }
+
+    private static String pad(String oriStr, int len, char alexin) {
+        String str = "";
+        int strlen = oriStr.length();
+        if (strlen < len) {
+            for (int i = 0; i < len - strlen; i++) {
+                str = str + alexin;
+            }
+        }
+        return str;
+    }
+
+    /**
+     * long转日期格式
+     *
+     * @param mins     时间戳
+     * @param formater 日期格式
+     */
+    public static String GetFormatDate(long mins, String formater) {
+        if (StringUtils.isEmpty(formater)) {
+            formater = "yyyy-MM-dd";
+        }
+        SimpleDateFormat format = new SimpleDateFormat(formater);
+        Date date = new Date(mins);
+        return format.format(date);
     }
 }
