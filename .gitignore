@@ -1,0 +1,36 @@
+# maven ignore
+build/
+
+out/
+
+# eclipse ignore
+.settings/
+.project
+.classpath
+
+# idea ignore
+.idea/
+*.ipr
+*.iml
+*.iws
+# gradle ignore
+.gradle/
+
+# temp ignore
+*.log
+*.cache
+*.diff
+*.patch
+*.tmp
+*.java~
+*.properties~
+*.xml~
+*.lock
+*.registry.properties
+
+# system ignore
+.DS_Store
+Thumbs.db
+
+# review board config
+.reviewboardrc
