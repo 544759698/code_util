@@ -136,7 +136,7 @@ public class Format {
      * @param mins     时间戳
      * @param formater 日期格式
      */
-    public static String GetFormatDate(long mins, String formater) {
+    public static String getFormatDate(long mins, String formater) {
         if (StringUtils.isEmpty(formater)) {
             formater = "yyyy-MM-dd";
         }
