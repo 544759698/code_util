@@ -32,15 +32,15 @@ public class IpUtil {
 
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("Proxy-Client-IP");
+                ip = request.getHeader("Proxy-ClientController-IP");
                 if (logger.isInfoEnabled()) {
-                    logger.info("getIpAddress(HttpServletRequest) - Proxy-Client-IP - String ip=" + ip);
+                    logger.info("getIpAddress(HttpServletRequest) - Proxy-ClientController-IP - String ip=" + ip);
                 }
             }
             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-                ip = request.getHeader("WL-Proxy-Client-IP");
+                ip = request.getHeader("WL-Proxy-ClientController-IP");
                 if (logger.isInfoEnabled()) {
-                    logger.info("getIpAddress(HttpServletRequest) - WL-Proxy-Client-IP - String ip=" + ip);
+                    logger.info("getIpAddress(HttpServletRequest) - WL-Proxy-ClientController-IP - String ip=" + ip);
                 }
             }
             if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {

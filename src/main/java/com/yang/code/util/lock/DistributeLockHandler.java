@@ -17,9 +17,9 @@ import java.util.concurrent.TimeUnit;
 public class DistributeLockHandler {
     private static final Logger logger = LoggerFactory.getLogger(DistributeLockHandler.class);
     /**
-     * 单个业务持有锁的时间30s，防止死锁
+     * 单个业务持有锁的时间10s，防止死锁
      **/
-    private final static long LOCK_EXPIRE = 20 * 1000L;
+    private final static long LOCK_EXPIRE = 10 * 1000L;
     /**
      * 默认20ms尝试一次
      **/
@@ -36,6 +36,7 @@ public class DistributeLockHandler {
      * 尝试获取全局锁
      *
      * @param lock 锁的名称
+     *
      * @return true 获取成功，false获取失败
      */
     public boolean tryLock(LockDTO lock) {
@@ -47,6 +48,7 @@ public class DistributeLockHandler {
      *
      * @param lock    锁的名称
      * @param timeout 获取超时时间 单位ms
+     *
      * @return true 获取成功，false获取失败
      */
     public boolean tryLock(LockDTO lock, long timeout) {
@@ -59,6 +61,7 @@ public class DistributeLockHandler {
      * @param lock        锁的名称
      * @param timeout     获取锁的超时时间
      * @param tryInterval 多少毫秒尝试获取一次
+     *
      * @return true 获取成功，false获取失败
      */
     public boolean tryLock(LockDTO lock, long timeout, long tryInterval) {
@@ -72,12 +75,12 @@ public class DistributeLockHandler {
      * @param timeout        获取锁的超时时间
      * @param tryInterval    多少毫秒尝试获取一次
      * @param lockExpireTime 锁的过期
+     *
      * @return true 获取成功，false获取失败
      */
     public boolean tryLock(LockDTO lock, long timeout, long tryInterval, long lockExpireTime) {
         return getLock(lock, timeout, tryInterval, lockExpireTime);
     }
-
 
     /**
      * 操作redis获取全局锁
@@ -86,6 +89,7 @@ public class DistributeLockHandler {
      * @param timeout        获取的超时时间
      * @param tryInterval    多少ms尝试一次
      * @param lockExpireTime 获取成功后锁的过期时间
+     *
      * @return true 获取成功，false获取失败
      */
     public boolean getLock(LockDTO lock, long timeout, long tryInterval, long lockExpireTime) {
@@ -94,10 +98,11 @@ public class DistributeLockHandler {
                 return false;
             }
             long startTime = System.currentTimeMillis();
-            do {
-                if (!template.hasKey(lock.getName())) {
-                    ValueOperations<String, String> ops = template.opsForValue();
-                    ops.set(lock.getName(), lock.getValue(), lockExpireTime, TimeUnit.MILLISECONDS);
+            boolean hasLock = false;
+            while (!hasLock) {
+                hasLock = template.opsForValue().setIfAbsent(lock.getName(), lock.getValue(),
+                        lockExpireTime, TimeUnit.MILLISECONDS);
+                if (hasLock) {
                     return true;
                 } else {
                     //存在锁
@@ -108,7 +113,7 @@ public class DistributeLockHandler {
                     return false;
                 }
                 Thread.sleep(tryInterval);
-            } while (template.hasKey(lock.getName()));//TODO:这里的判断有问题，需要改进
+            }
         } catch (InterruptedException e) {
             logger.error(e.getMessage());
             return false;
