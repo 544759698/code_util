@@ -3,8 +3,7 @@ package com.yang.code.util;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.commons.lang.StringUtils;
-
+import org.apache.commons.lang3.StringUtils;
 /**
  * Created by Administrator on 2018/7/26.
  * 格式转换工具类
